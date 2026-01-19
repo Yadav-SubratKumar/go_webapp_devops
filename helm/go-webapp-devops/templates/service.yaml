@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-web-app
+  name: {{ .Values.image.name }}
   labels:
-    app: go-web-app
+    app: {{ .Values.image.name }}
 spec:
   selector:
-    app: go-web-app
+    app: {{ .Values.image.name }}
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: {{ .Values.port }}
+      targetPort: {{ .Values.containerPort }}
   type: NodePort

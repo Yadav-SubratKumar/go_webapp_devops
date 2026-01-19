@@ -1,0 +1,18 @@
+replicaCount: 1
+
+containerPort: 8080
+port: 80
+
+servicetype: NodePort
+image:
+  name: go-web-app
+  repository: subratdevops/go-web-app
+  tag: latest
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
