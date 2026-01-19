@@ -7,7 +7,7 @@ servicetype: NodePort
 image:
   name: go-web-app
   repository: subratdevops/go-web-app
-  tag: stable
+  tag: "21137449364"
 
 resources:
   requests:
