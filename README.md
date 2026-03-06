@@ -1,4 +1,5 @@
 # Go Web Application
+![Alt text](diagram.png)
 
 This is a simple website written in Golang. It uses the `net/http` package to serve HTTP requests.
 
