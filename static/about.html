@@ -1,78 +1,198 @@
-<Docktype html>
-    <html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — DevOps Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:#0A0F1E; --navy2:#0F1629; --panel:#141B2D; --border:#1E2940;
+      --cyan:#00D4FF; --cyan-dim:#00D4FF33; --purple:#7B5EFF; --green:#00FF94;
+      --muted:#8892A4; --text:#C8D4E8; --white:#F0F4FF;
+    }
+    html { scroll-behavior: smooth; }
+    body { background:var(--navy); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; min-height:100vh; }
 
-    <head>
-        <title>About</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2.5rem; height:64px;
+      background:rgba(10,15,30,0.7); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo { font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--cyan); letter-spacing:.02em; }
+    .nav-logo span { color:var(--muted); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:.875rem; font-weight:500; letter-spacing:.03em; transition:color .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a.active::after { content:''; display:block; height:2px; background:var(--cyan); margin-top:2px; border-radius:2px; }
 
-            header {
-                background-color: #1f61a4;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+    .page-header {
+      padding: 8rem 2.5rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--navy2);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content:'';
+      position:absolute; inset:0;
+      background-image: linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+      background-size:48px 48px;
+      mask-image: radial-gradient(ellipse 70% 80% at 50% 0%, black, transparent);
+    }
+    .page-header .tag { font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.75rem; position:relative; }
+    .page-header h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; color:var(--white); position:relative; }
+    .page-header h1 span { color:var(--cyan); }
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+    .about-wrap { max-width:1000px; margin:0 auto; padding:5rem 2.5rem; display:grid; grid-template-columns:1fr 2fr; gap:3rem; align-items:start; }
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+    .profile-card {
+      background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:2rem; text-align:center; position:sticky; top:80px;
+    }
+    .avatar {
+      width:90px; height:90px; border-radius:50%; margin:0 auto 1rem;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--navy);
+    }
+    .profile-card h2 { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:var(--white); margin-bottom:.25rem; }
+    .profile-card .role { font-size:.8rem; color:var(--cyan); font-family:'JetBrains Mono',monospace; margin-bottom:1.25rem; }
+    .profile-links { display:flex; flex-direction:column; gap:.6rem; }
+    .profile-links a {
+      display:block; padding:.6rem 1rem; border-radius:6px;
+      background:transparent; border:1px solid var(--border);
+      color:var(--text); text-decoration:none; font-size:.85rem; transition:all .2s;
+    }
+    .profile-links a:hover { border-color:var(--cyan); color:var(--cyan); background:var(--cyan-dim); }
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+    .about-content {}
+    .about-content .section-tag { font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.5rem; }
+    .about-content h2 { font-family:'Space Grotesk',sans-serif; font-size:1.6rem; font-weight:700; color:var(--white); margin-bottom:1rem; }
+    .about-content p { color:var(--muted); margin-bottom:1.25rem; line-height:1.8; }
 
-            main {
-                padding: 20px;
-            }
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:.75rem; margin:2rem 0; }
+    .skill-chip {
+      background:var(--panel); border:1px solid var(--border); border-radius:6px;
+      padding:.6rem 1rem; font-size:.8rem; color:var(--text); font-family:'JetBrains Mono',monospace;
+      display:flex; align-items:center; gap:.5rem; transition:border-color .2s;
+    }
+    .skill-chip:hover { border-color:var(--cyan); }
+    .skill-chip::before { content:'▸'; color:var(--cyan); }
 
-            section {
-                margin-bottom: 20px;
-            }
+    .timeline { margin-top:3rem; }
+    .tl-item { display:flex; gap:1.5rem; margin-bottom:2rem; position:relative; }
+    .tl-item::before { content:''; position:absolute; left:10px; top:28px; bottom:-2rem; width:1px; background:var(--border); }
+    .tl-item:last-child::before { display:none; }
+    .tl-dot { width:22px; height:22px; border-radius:50%; border:2px solid var(--cyan); background:var(--navy); flex-shrink:0; margin-top:3px; }
+    .tl-body {}
+    .tl-body .tl-date { font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--cyan); margin-bottom:.25rem; }
+    .tl-body h4 { font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; color:var(--white); margin-bottom:.25rem; }
+    .tl-body p { font-size:.875rem; color:var(--muted); }
 
-            footer {
-                background-color: #1f61a4;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
+    footer { padding:2rem 2.5rem; border-top:1px solid var(--border); text-align:center; font-size:.8rem; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+    footer a { color:var(--cyan); text-decoration:none; }
 
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Project</a></li>
-                </ul>
-            </nav>
-        </header>
+    @media(max-width:700px){
+      .about-wrap { grid-template-columns:1fr; padding:3rem 1.25rem; }
+      .profile-card { position:static; }
+      nav { padding:0 1.25rem; }
+      .nav-links { gap:1.2rem; }
+    }
+  </style>
+</head>
+<body>
 
-        <main>
-            <section>
-                <h1>About the Author</h1>
-                <p>Hi Everyone, My name is Subrat and welcome to my website :)</p>
-            </section>
-        </main>
+<nav>
+  <div class="nav-logo">~/devops<span>.hub</span></div>
+  <ul class="nav-links">
+    <li><a href="home">Home</a></li>
+    <li><a href="about" class="active">About</a></li>
+    <li><a href="courses">Projects</a></li>
+    <li><a href="contact">Contact</a></li>
+  </ul>
+</nav>
 
-        <footer>
-            <p>&copy; Subratkumar</p>
-        </footer>
-    </body>
+<div class="page-header">
+  <div class="tag">// about</div>
+  <h1>Meet the <span>Author</span></h1>
+</div>
 
-    </html>
+<div class="about-wrap">
+
+  <aside>
+    <div class="profile-card">
+      <div class="avatar">SK</div>
+      <h2>Subrat Kumar Yadav</h2>
+      <div class="role">DevOps Engineer</div>
+      <div class="profile-links">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank">🐙 GitHub</a>
+        <a href="contact">✉️ Contact</a>
+        <a href="courses">📂 Projects</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="about-content">
+    <div class="section-tag">// who i am</div>
+    <h2>DevOps Engineer & Open Source Enthusiast</h2>
+    <p>I'm Subrat — a DevOps engineer passionate about infrastructure automation, container orchestration, and building systems that scale. I created this hub to share hands-on knowledge that's practical, project-based, and 100% free.</p>
+    <p>Whether you're a developer looking to understand deployments or an aspiring SRE, I'm sharing everything I've learned working with Kubernetes, Helm, AWS, Azure, and modern CI/CD pipelines in real environments.</p>
+
+    <div class="section-tag">// skills</div>
+    <div class="skills-grid">
+      <div class="skill-chip">Docker</div>
+      <div class="skill-chip">Kubernetes</div>
+      <div class="skill-chip">Helm</div>
+      <div class="skill-chip">Terraform</div>
+      <div class="skill-chip">GitHub Actions</div>
+      <div class="skill-chip">AWS</div>
+      <div class="skill-chip">Azure</div>
+      <div class="skill-chip">Ansible</div>
+      <div class="skill-chip">Go</div>
+      <div class="skill-chip">Python</div>
+      <div class="skill-chip">Linux</div>
+      <div class="skill-chip">Prometheus</div>
+    </div>
+
+    <div class="timeline">
+      <div class="section-tag">// journey</div>
+      <br>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">NOW</div>
+          <h4>DevOps Hub — Open Source Learning Platform</h4>
+          <p>Building and maintaining this Go-powered web app deployed on Kubernetes with Helm charts, serving DevOps learning resources to the community.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">PROJECTS</div>
+          <h4>Kubernetes & Cloud Infrastructure</h4>
+          <p>Hands-on work with EKS, AKS, Helm chart development, CI/CD automation, and infrastructure-as-code using Terraform and Ansible.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">BACKGROUND</div>
+          <h4>Software Engineering Foundations</h4>
+          <p>Started in software development, then shifted focus to platform engineering and DevOps practices — bridging the gap between dev and ops.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="about">Subrat Kumar</a> · Deployed on Kubernetes · <a href="https://github.com/Yadav-SubratKumar" target="_blank">GitHub</a></p>
+</footer>
+</body>
+</html>

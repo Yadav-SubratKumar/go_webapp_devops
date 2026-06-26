@@ -1,63 +1,204 @@
-<Doctype html>
-<html>
-    <head>
-        <title>Contact</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — DevOps Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    :root {
+      --navy:#0A0F1E; --navy2:#0F1629; --panel:#141B2D; --border:#1E2940;
+      --cyan:#00D4FF; --cyan-dim:#00D4FF33; --purple:#7B5EFF; --green:#00FF94;
+      --muted:#8892A4; --text:#C8D4E8; --white:#F0F4FF;
+    }
+    html { scroll-behavior:smooth; }
+    body { background:var(--navy); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; min-height:100vh; }
 
-            header {
-                background-color: #1f61a4;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2.5rem; height:64px;
+      background:rgba(10,15,30,0.7); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo { font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--cyan); }
+    .nav-logo span { color:var(--muted); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:.875rem; font-weight:500; letter-spacing:.03em; transition:color .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a.active::after { content:''; display:block; height:2px; background:var(--cyan); margin-top:2px; border-radius:2px; }
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+    .page-header {
+      padding:8rem 2.5rem 4rem; text-align:center;
+      border-bottom:1px solid var(--border); background:var(--navy2); position:relative; overflow:hidden;
+    }
+    .page-header::before {
+      content:''; position:absolute; inset:0;
+      background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(ellipse 70% 80% at 50% 0%,black,transparent);
+    }
+    .page-header .tag { font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.75rem; position:relative; }
+    .page-header h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; color:var(--white); position:relative; }
+    .page-header h1 span { color:var(--cyan); }
+    .page-header p { color:var(--muted); margin-top:.75rem; position:relative; }
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+    .contact-wrap { max-width:900px; margin:0 auto; padding:5rem 2.5rem; display:grid; grid-template-columns:1fr 1.4fr; gap:3rem; align-items:start; }
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+    .contact-info {}
+    .contact-info .section-tag { font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.5rem; }
+    .contact-info h2 { font-family:'Space Grotesk',sans-serif; font-size:1.5rem; font-weight:700; color:var(--white); margin-bottom:1rem; }
+    .contact-info p { color:var(--muted); font-size:.9rem; line-height:1.8; margin-bottom:2rem; }
 
-            main {
-                padding: 20px;
-            }
+    .channel-list { display:flex; flex-direction:column; gap:.75rem; }
+    .channel {
+      display:flex; align-items:center; gap:1rem;
+      background:var(--panel); border:1px solid var(--border); border-radius:8px;
+      padding:1rem 1.25rem; text-decoration:none; color:var(--text);
+      transition:border-color .2s, color .2s;
+    }
+    .channel:hover { border-color:var(--cyan); color:var(--cyan); }
+    .channel-icon { font-size:1.25rem; flex-shrink:0; }
+    .channel-info {}
+    .channel-info .ch-label { font-size:.7rem; font-family:'JetBrains Mono',monospace; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+    .channel-info .ch-val { font-size:.9rem; font-weight:500; color:inherit; margin-top:.1rem; }
 
-            section {
-                margin-bottom: 20px;
-            }
+    .contact-form-wrap {
+      background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:2rem;
+    }
+    .form-title { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:600; color:var(--white); margin-bottom:1.5rem; }
 
-            footer {
-                background-color: #1f61a4;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Project</a></li>
-                </ul>
-            </nav>
-        </header>
+    .field { margin-bottom:1.25rem; }
+    label { display:block; font-size:.78rem; font-family:'JetBrains Mono',monospace; color:var(--muted); letter-spacing:.06em; margin-bottom:.4rem; }
+    input, textarea, select {
+      width:100%; background:var(--navy2); border:1px solid var(--border); border-radius:6px;
+      padding:.7rem 1rem; color:var(--white); font-family:'Inter',sans-serif; font-size:.9rem;
+      outline:none; transition:border-color .2s;
+    }
+    input::placeholder, textarea::placeholder { color:var(--muted); }
+    input:focus, textarea:focus, select:focus { border-color:var(--cyan); }
+    textarea { resize:vertical; min-height:110px; }
 
+    .btn-submit {
+      width:100%; padding:.85rem; border-radius:6px; border:none;
+      background:var(--cyan); color:var(--navy); font-size:.95rem; font-weight:700;
+      font-family:'Space Grotesk',sans-serif; cursor:pointer; transition:all .2s; letter-spacing:.02em;
+    }
+    .btn-submit:hover { background:#33DDFF; box-shadow:0 4px 20px rgba(0,212,255,.3); }
+
+    .success-msg {
+      display:none; margin-top:1rem; padding:.85rem 1rem; border-radius:6px;
+      background:rgba(0,255,148,.1); border:1px solid rgba(0,255,148,.25);
+      color:var(--green); font-size:.875rem; font-family:'JetBrains Mono',monospace;
+    }
+
+    footer { padding:2rem 2.5rem; border-top:1px solid var(--border); text-align:center; font-size:.8rem; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2rem; }
+    footer a { color:var(--cyan); text-decoration:none; }
+
+    @media(max-width:680px){
+      nav { padding:0 1.25rem; } .nav-links { gap:1.2rem; }
+      .contact-wrap { grid-template-columns:1fr; padding:3rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">~/devops<span>.hub</span></div>
+  <ul class="nav-links">
+    <li><a href="home">Home</a></li>
+    <li><a href="about">About</a></li>
+    <li><a href="courses">Projects</a></li>
+    <li><a href="contact" class="active">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="tag">// get in touch</div>
+  <h1>Let's <span>Connect</span></h1>
+  <p>Questions, collabs, or just want to say hi — I'm happy to hear from you.</p>
+</div>
+
+<div class="contact-wrap">
+
+  <div class="contact-info">
+    <div class="section-tag">// reach me at</div>
+    <h2>Happy to Collaborate</h2>
+    <p>Whether you have a question about a project, want to collaborate on something DevOps-related, or just want to connect — drop me a message.</p>
+
+    <div class="channel-list">
+      <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="channel">
+        <div class="channel-icon">🐙</div>
+        <div class="channel-info">
+          <div class="ch-label">GitHub</div>
+          <div class="ch-val">Yadav-SubratKumar</div>
+        </div>
+      </a>
+      <a href="mailto:your@email.com" class="channel">
+        <div class="channel-icon">✉️</div>
+        <div class="channel-info">
+          <div class="ch-label">Email</div>
+          <div class="ch-val">Send a message</div>
+        </div>
+      </a>
+      <a href="https://linkedin.com" target="_blank" class="channel">
+        <div class="channel-icon">💼</div>
+        <div class="channel-info">
+          <div class="ch-label">LinkedIn</div>
+          <div class="ch-val">Connect with me</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-form-wrap">
+    <div class="form-title">// send_message.sh</div>
+
+    <div class="field">
+      <label>NAME</label>
+      <input type="text" id="name" placeholder="Your name">
+    </div>
+    <div class="field">
+      <label>EMAIL</label>
+      <input type="email" id="email" placeholder="you@example.com">
+    </div>
+    <div class="field">
+      <label>TOPIC</label>
+      <select id="topic">
+        <option value="" disabled selected>Select a topic</option>
+        <option>Question about a project</option>
+        <option>Collaboration</option>
+        <option>Bug report</option>
+        <option>Just saying hi</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>MESSAGE</label>
+      <textarea id="message" placeholder="What's on your mind?"></textarea>
+    </div>
+
+    <button class="btn-submit" onclick="handleSubmit()">Send Message →</button>
+    <div class="success-msg" id="successMsg">✓ Message received! I'll get back to you soon.</div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="about">Subrat Kumar</a> · Deployed on Kubernetes · <a href="https://github.com/Yadav-SubratKumar" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+  function handleSubmit() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    if (!name || !email || !message) { alert('Please fill in name, email, and message.'); return; }
+    document.getElementById('successMsg').style.display = 'block';
+    ['name','email','message'].forEach(id => document.getElementById(id).value = '');
+  }
+</script>
+</body>
+</html>

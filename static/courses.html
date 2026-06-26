@@ -1,85 +1,244 @@
-<DocType html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — DevOps Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:#0A0F1E; --navy2:#0F1629; --panel:#141B2D; --border:#1E2940;
+      --cyan:#00D4FF; --cyan-dim:#00D4FF33; --purple:#7B5EFF; --green:#00FF94;
+      --muted:#8892A4; --text:#C8D4E8; --white:#F0F4FF;
+    }
+    html { scroll-behavior: smooth; }
+    body { background:var(--navy); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; min-height:100vh; }
 
-<html>
-    <head>
-        <title>Learn DevOps from Basics</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 2.5rem; height:64px;
+      background:rgba(10,15,30,0.7); backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo { font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--cyan); }
+    .nav-logo span { color:var(--muted); }
+    .nav-links { display:flex; gap:2rem; list-style:none; }
+    .nav-links a { color:var(--muted); text-decoration:none; font-size:.875rem; font-weight:500; letter-spacing:.03em; transition:color .2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-links a.active::after { content:''; display:block; height:2px; background:var(--cyan); margin-top:2px; border-radius:2px; }
 
-            header {
-                background-color: #1f61a4;
-                color: #fff;
-                padding: 10px 0;
-                text-align: center;
-            }
+    .page-header {
+      padding:8rem 2.5rem 4rem; text-align:center;
+      border-bottom:1px solid var(--border); background:var(--navy2); position:relative; overflow:hidden;
+    }
+    .page-header::before {
+      content:''; position:absolute; inset:0;
+      background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+      background-size:48px 48px;
+      mask-image:radial-gradient(ellipse 70% 80% at 50% 0%,black,transparent);
+    }
+    .page-header .tag { font-family:'JetBrains Mono',monospace; font-size:.75rem; color:var(--purple); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.75rem; position:relative; }
+    .page-header h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:700; color:var(--white); position:relative; }
+    .page-header h1 span { color:var(--cyan); }
+    .page-header p { color:var(--muted); margin-top:.75rem; position:relative; font-size:1rem; }
 
-            nav ul {
-                list-style-type: none;
-                padding: 0;
-            }
+    .projects-wrap { max-width:1100px; margin:0 auto; padding:4rem 2.5rem; }
 
-            nav ul li {
-                display: inline;
-                margin-right: 10px;
-            }
+    .filter-bar {
+      display:flex; gap:.75rem; flex-wrap:wrap; margin-bottom:2.5rem;
+    }
+    .filter-btn {
+      padding:.45rem 1rem; border-radius:20px; border:1px solid var(--border);
+      background:transparent; color:var(--muted); font-size:.8rem; cursor:pointer;
+      font-family:'JetBrains Mono',monospace; transition:all .2s; letter-spacing:.04em;
+    }
+    .filter-btn:hover, .filter-btn.active { border-color:var(--cyan); color:var(--cyan); background:var(--cyan-dim); }
 
-            nav ul li a {
-                color: #fff;
-                text-decoration: none;
-            }
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.25rem; }
 
-            main {
-                padding: 20px;
-            }
+    .project-card {
+      background:var(--panel); border:1px solid var(--border); border-radius:12px;
+      padding:1.75rem; transition:border-color .2s, transform .2s; display:flex; flex-direction:column;
+    }
+    .project-card:hover { border-color:var(--cyan); transform:translateY(-2px); }
 
-            section {
-                margin-bottom: 20px;
-            }
+    .card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; }
+    .card-icon { font-size:1.75rem; }
+    .card-badges { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .badge {
+      font-family:'JetBrains Mono',monospace; font-size:.65rem; padding:.25rem .6rem;
+      border-radius:4px; letter-spacing:.05em;
+    }
+    .badge-k8s { background:rgba(0,212,255,0.12); color:var(--cyan); border:1px solid rgba(0,212,255,0.25); }
+    .badge-docker { background:rgba(0,255,148,0.1); color:var(--green); border:1px solid rgba(0,255,148,0.2); }
+    .badge-cicd { background:rgba(123,94,255,0.12); color:var(--purple); border:1px solid rgba(123,94,255,0.25); }
+    .badge-go { background:rgba(0,212,255,0.08); color:#5DC9E2; border:1px solid rgba(93,201,226,0.2); }
+    .badge-cloud { background:rgba(255,189,46,0.1); color:#FFBD2E; border:1px solid rgba(255,189,46,0.2); }
+    .badge-iac { background:rgba(200,100,255,0.1); color:#C864FF; border:1px solid rgba(200,100,255,0.2); }
 
-            footer {
-                background-color: #1f61a4;
-                color: #fff;
-                text-align: center;
-                padding: 10px 0;
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <ul>
-                    <li><a href="home">Home</a></li>
-                    <li><a href="about">About</a></li>
-                    <li><a href="contact">Contact</a></li>
-                    <li><a href="courses">Project</a></li>
-                </ul>
-            </nav>
-        </header>
+    .project-card h3 { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:600; color:var(--white); margin-bottom:.5rem; }
+    .project-card p { font-size:.875rem; color:var(--muted); line-height:1.7; flex:1; }
 
-        <main>
-            <section>
-                <h1>Learn DevOps from Basics</h1>
-                <p>DevOps is a set of practices that combines software development (Dev) and IT operations (Ops)</p>
-                <p>It aims to shorten the systems development life cycle and provide continuous delivery with high software quality. DevOps is complementary with Agile software development; several DevOps aspects came from Agile methodology</p>    
+    .card-footer { display:flex; gap:.75rem; margin-top:1.5rem; }
+    .card-link {
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-size:.8rem; color:var(--cyan); text-decoration:none;
+      font-family:'JetBrains Mono',monospace; transition:opacity .2s;
+    }
+    .card-link:hover { opacity:.75; }
+    .card-link.secondary { color:var(--muted); }
+    .card-link.secondary:hover { color:var(--text); opacity:1; }
 
-                <h2>My Projects</h2>
-                <p><a href="https://github.com/Yadav-SubratKumar/3-Tier-DevSecOps-Mega-Project">3-Tier-DevSecOps-Mega-Project</a></p>
-                <p><a href="https://github.com/Yadav-SubratKumar/Django-Poll-App">Django-Poll-App</a></p>
-                <p><a href="https://github.com/Yadav-SubratKumar/ansible_playbooks">Ansible_Playbooks</a></p>
-                <p><a href="https://github.com/Yadav-SubratKumar/k8s-voting-app">k8s-voting-app</a></p>
-                <p><a href="https://github.com/Yadav-SubratKumar/three-tier-flask-webapp">three-tier-flask-webapp</a></p>
-                <p><a href="https://github.com/Yadav-SubratKumar/go_webapp_devops">go_webapp_devops</a></p>
-                </section>
-        </main>
+    footer { padding:2rem 2.5rem; border-top:1px solid var(--border); text-align:center; font-size:.8rem; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2rem; }
+    footer a { color:var(--cyan); text-decoration:none; }
 
-        <footer>
-            <p>&copy; Subratkumar</p>
-        </footer>
-    </body>
+    @media(max-width:600px){
+      nav { padding:0 1.25rem; } .nav-links { gap:1.2rem; }
+      .projects-wrap { padding:3rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">~/devops<span>.hub</span></div>
+  <ul class="nav-links">
+    <li><a href="home">Home</a></li>
+    <li><a href="about">About</a></li>
+    <li><a href="courses" class="active">Projects</a></li>
+    <li><a href="contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="tag">// open source</div>
+  <h1>Real <span>Projects</span>, Real Skills</h1>
+  <p>Hands-on repos covering the full DevOps toolchain — clone, run, and learn.</p>
+</div>
+
+<div class="projects-wrap">
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterCards('all', this)">All</button>
+    <button class="filter-btn" onclick="filterCards('k8s', this)">Kubernetes</button>
+    <button class="filter-btn" onclick="filterCards('docker', this)">Docker</button>
+    <button class="filter-btn" onclick="filterCards('cicd', this)">CI/CD</button>
+    <button class="filter-btn" onclick="filterCards('cloud', this)">Cloud</button>
+    <button class="filter-btn" onclick="filterCards('iac', this)">IaC</button>
+  </div>
+
+  <div class="projects-grid" id="projectsGrid">
+
+    <div class="project-card" data-tags="k8s go cicd">
+      <div class="card-top">
+        <div class="card-icon">🚀</div>
+        <div class="card-badges">
+          <span class="badge badge-go">Go</span>
+          <span class="badge badge-k8s">K8s</span>
+          <span class="badge badge-cicd">CI/CD</span>
+        </div>
+      </div>
+      <h3>Go WebApp on Kubernetes</h3>
+      <p>This very site — a Go web application containerised with Docker, deployed via Helm charts onto Kubernetes, and shipped through a GitHub Actions pipeline.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="k8s docker">
+      <div class="card-top">
+        <div class="card-icon">☸️</div>
+        <div class="card-badges">
+          <span class="badge badge-k8s">K8s</span>
+          <span class="badge badge-docker">Docker</span>
+        </div>
+      </div>
+      <h3>Multi-Service K8s Deployment</h3>
+      <p>A multi-container application deployed across namespaces using Deployments, Services, ConfigMaps, and Ingress with TLS termination.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="cicd docker">
+      <div class="card-top">
+        <div class="card-icon">🔄</div>
+        <div class="card-badges">
+          <span class="badge badge-cicd">CI/CD</span>
+          <span class="badge badge-docker">Docker</span>
+        </div>
+      </div>
+      <h3>GitHub Actions Pipeline</h3>
+      <p>End-to-end CI/CD pipeline: lint → test → build Docker image → push to registry → deploy to Kubernetes cluster on every merge to main.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="cloud iac">
+      <div class="card-top">
+        <div class="card-icon">☁️</div>
+        <div class="card-badges">
+          <span class="badge badge-cloud">AWS</span>
+          <span class="badge badge-iac">Terraform</span>
+        </div>
+      </div>
+      <h3>EKS Cluster with Terraform</h3>
+      <p>Provision a production-ready Amazon EKS cluster using Terraform modules — VPC, node groups, IAM roles, and add-ons like CoreDNS and the AWS Load Balancer Controller.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="k8s iac">
+      <div class="card-top">
+        <div class="card-icon">⛵</div>
+        <div class="card-badges">
+          <span class="badge badge-k8s">Helm</span>
+          <span class="badge badge-iac">IaC</span>
+        </div>
+      </div>
+      <h3>Helm Chart Library</h3>
+      <p>A collection of reusable Helm charts for common microservice patterns — includes values files for dev, staging, and production environments.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+    <div class="project-card" data-tags="cloud cicd">
+      <div class="card-top">
+        <div class="card-icon">🔵</div>
+        <div class="card-badges">
+          <span class="badge badge-cloud">Azure</span>
+          <span class="badge badge-cicd">CI/CD</span>
+        </div>
+      </div>
+      <h3>AKS Deployment Pipeline</h3>
+      <p>Deploy containerised workloads to Azure Kubernetes Service using Azure DevOps pipelines and Helm. Covers ACR, managed identity, and RBAC configuration.</p>
+      <div class="card-footer">
+        <a href="https://github.com/Yadav-SubratKumar" target="_blank" class="card-link">→ View Repo</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>Built with ❤️ by <a href="about">Subrat Kumar</a> · Deployed on Kubernetes · <a href="https://github.com/Yadav-SubratKumar" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+  function filterCards(tag, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.project-card').forEach(card => {
+      const tags = card.dataset.tags || '';
+      card.style.display = (tag === 'all' || tags.includes(tag)) ? '' : 'none';
+    });
+  }
+</script>
+</body>
 </html>
